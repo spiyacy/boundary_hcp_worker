@@ -1,0 +1,20 @@
+# Docker Compose for HCP Boundary Worker
+version: "3.8"
+services:
+  vault:
+    image:  hashicorp/boundary-worker-hcp
+    container_name: boundary-hcp-worker
+    ports:
+      - 9202:9202
+      
+    volumes:
+      - type: bind
+        source: ${path} #Set an environmental variable for the local path where the Boundary config.hcl file is located
+        target: /boundary
+        
+    command: boundary-worker server -config /boundary/config.hcl
+    
+networks: 
+  default: 
+    external: 
+      name: ${network_name} #Set an environmental variable for mapping the appropriate network
